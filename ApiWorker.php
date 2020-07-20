@@ -8,7 +8,7 @@
         private $client_secret;
         private $redirect_uri;
 
-        function __construct($client_id, $client_secret, $redirect_uri){
+        function __construct($client_id="", $client_secret="", $redirect_uri=""){
             $this->client_id = $client_id;
             $this->client_secret = $client_secret;
             $this->redirect_uri = $redirect_uri;
@@ -24,6 +24,7 @@
         }
 
         function getTokens($session){
+            $session->requestAccessToken($_GET['code']);
             $accessToken = $session->getAccessToken();
             $refreshToken = $session->getRefreshToken();
 
@@ -40,10 +41,13 @@
             die();
         }
 
-        function showPlaylists($session, $limit=25){
+        function getAcces($accessToken){
             $api = new SpotifyWebAPI\SpotifyWebAPI();
-            $session->requestAccessToken($_GET['code']);
-            $api->setAccessToken($session->getAccessToken());
+            $api->setAccessToken($accessToken);
+            return $api;
+        }
+
+        function showPlaylists($api, $limit=25){
             
             $userId = $api->me()->id;
 

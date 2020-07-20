@@ -4,11 +4,15 @@
     error_reporting(E_ALL);
 
     include_once 'DbWorker.php';
+    include_once 'ApiWorker.php';
 
+    $apiworker = new ApiWorker();
     $db = new DbWorker();
-    // $db->initDb();
-    // $test = ["ac" => 1, "rf" => 2];
-    // $db->insert($test);
-    //$test = ["ac"];
-    $test = "ac";
-    print_r($db->select($test));
+    $db->initDb();
+
+
+    $test = ["ac", "rf"];
+    $token = $db->select($test)["ac"];
+    $api = $apiworker->getAcces($token);
+    $pl = $apiworker->showPlaylists($api);
+    print_r($pl);
