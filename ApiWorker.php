@@ -23,6 +23,18 @@
             return $session;
         }
 
+        function getTokens($session){
+            $accessToken = $session->getAccessToken();
+            $refreshToken = $session->getRefreshToken();
+
+            $tokens = [
+                "ac" => $accessToken,
+                "rf" => $refreshToken
+            ];
+
+            return $tokens;
+        }
+
         function thowCallback($session, $options){
             header('Location: ' . $session->getAuthorizeUrl($options));
             die();
@@ -39,9 +51,8 @@
                 'limit' => $limit
             ]);
             
-            foreach ($playlists->items as $playlist) {
-                echo '<a href="' . $playlist->external_urls->spotify . '">' . $playlist->name . '</a> <br>';
-            }
+            return $playlists;
+            
         }
 
     }

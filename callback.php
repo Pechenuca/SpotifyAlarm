@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include_once 'ApiWorker.php';
 
 $apiworker = new ApiWorker(
@@ -9,7 +13,8 @@ $apiworker = new ApiWorker(
 );
 
 $session = $apiworker->sessionCreater();
-$apiworker->showPlaylists($session);
+$tokens = $apiworker->getTokens($session);
 
-    
+// header('Location: index.php');
+// die();
 
