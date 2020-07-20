@@ -13,3 +13,21 @@ body {
     height: 170px;
     width: 190px;
 }
+
+#playlistsBlock {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    height: 500px;
+}
+
+#playlistsBlock > .imgHolder > img{
+    max-width: 90px;
+}
+
+.imgHolder{
+    margin: 20px;
+    height: 140px;
+    width: 200px;
+    float: left;
+}

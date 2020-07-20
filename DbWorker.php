@@ -7,7 +7,7 @@
         }
 
         function initDb(){
-            $this->exec('CREATE TABLE IF NOT EXISTS spotify (ac STRING, rf STRING)');
+            $this->exec('CREATE TABLE IF NOT EXISTS spotify (ac STRING, rf STRING, al BOOL)');
         }
 
         function dropDeBase(){
@@ -17,7 +17,8 @@
         function insert($values){
             $ac = $values["ac"];
             $rf = $values["rf"];
-            $this->exec("INSERT INTO spotify (ac, rf) VALUES ('$ac', '$rf')");
+            $al = $values["al"];
+            $this->exec("INSERT INTO spotify (ac, rf, al) VALUES ('$ac', '$rf', '$al')");
         }
 
         function select($options){

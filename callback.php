@@ -16,7 +16,10 @@ $apiworker = new ApiWorker(
 
 $session = $apiworker->sessionCreater();
 $tokens = $apiworker->getTokens($session);
+$tokens["al"] = "false";
 
+
+print_r($tokens);
 $db->insert($tokens);
 
 header('Location: index.php');
