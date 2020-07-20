@@ -1,0 +1,15 @@
+body {
+    font-family: 'Oswald', sans-serif;
+    background-color: #f4a261;
+    color: #264653;
+
+}
+#hello_message {
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+}
+#image {
+    height: 170px;
+    width: 190px;
+}
