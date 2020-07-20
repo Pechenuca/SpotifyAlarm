@@ -1,12 +1,14 @@
 <?php
 
-require 'vendor/autoload.php';
+include_once 'ApiWorker.php';
 
-$session = new SpotifyWebAPI\Session(
+$apiworker = new ApiWorker(
     '4c1a95527dc54225a451755541e9206d',
     'cb042e53ec654ded8685375027afd105',
     'http://localhost:8888/callback.php'
 );
+
+$session = $apiworker->sessionCreater();
 
 $options = [
     'scope' => [
@@ -15,5 +17,4 @@ $options = [
     ],
 ];
 
-header('Location: ' . $session->getAuthorizeUrl($options));
-die();
+$apiworker->thowCallback($session, $options);
