@@ -1,11 +1,19 @@
 # SpotifyAlarm
-не забываем про либы
-```
-composer install 
-```
 
-TODO написать класс для скачивание музыки в tmp директорию и передачи ссылки на плейлист через get параметр
- + нужно немного подправить работ с базой данных
- и нужно сделать обратный таймер на js какбы 
- былобы не плохо еще и стили нормальные сделатб 
- максим сука давай работай !!!!
+Wake up with your spotify playlist 
+
+## Install
+
+```
+pip install -r requirements.txt
+```
+and you also need installed ffmpeg in your path 
+
+## TODO
+
+ + play music from tmp folder
+ + sort tmp folder
+ + deleting tmp folder
+ + logger for ALL classes 
+ + alarm ¯\_(ツ)_/¯
+ + setting alarm from ios/android
