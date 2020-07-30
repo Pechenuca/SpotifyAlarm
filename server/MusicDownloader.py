@@ -16,9 +16,9 @@ class MusicDownloader(object):
     
     def findVideo(self):
         ytSearch = YoutubeSearch(self.request, max_results=1).to_dict()[0].get('url_suffix')
-        url = 'https://www.youtube.com/' + ytSearch
+        url = 'https://www.youtube.com' + ytSearch
         return url
-        time.sleep(1)
+        
     
     def dnSong(self, links):
         ydl_opts = {
@@ -34,4 +34,3 @@ class MusicDownloader(object):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([links])
         
-        time.sleep(1)
