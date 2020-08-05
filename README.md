@@ -11,9 +11,8 @@ and you also need installed ffmpeg in your path
 
 ## TODO
 
+ + Create Alarm class important!!!
  + play music from tmp folder
  + sort tmp folder
  + deleting tmp folder
- + logger for ALL classes 
- + alarm ¯\_(ツ)_/¯
- + setting alarm from ios/android
+ + setting alarm from ios/android in progress
