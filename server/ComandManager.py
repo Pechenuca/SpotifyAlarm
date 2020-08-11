@@ -1,11 +1,12 @@
 from SpotifyParser import SpotifyParser 
 from MusicDownloader import MusicDownloader
-#from Alarm import Alarm
+from Alarm import Alarm
 
 class ComandManager(object):
     
     def __init__(self, com):
         self.com = com
+        self.alarmClass = Alarm()
     
     def checkAtrs(self, atr):
         try:
@@ -39,13 +40,17 @@ class ComandManager(object):
         """
         поставить будильник
         """
-        pass
+        self.alarmClass.setAlarm(atr)
+
+        return 'setAlarmOk'
     
     def delAlarm(self, atr):
         """
         удалить будильник
         """
-        pass
+        self.alarmClass.delAlarm(atr)
+
+        return 'delAlarmOk'
 
     def clsTmp(self):
         """
@@ -57,7 +62,9 @@ class ComandManager(object):
         """
         показать будильники
         """
-        pass
+        res = self.alarmClass.showAlarm(atr)
+        return str(res)
+        
     
     def dwnMusic(self, playlistId):
         """
@@ -74,5 +81,12 @@ class ComandManager(object):
             toDownload = md.findVideo()
             print(toDownload)
             md.dnSong(toDownload)
+        
+        #rename all files
+
+        tmpFiles = os.listdir("tmp")
+
+        for index, file in enumerate(tmpFiles):
+            os.rename(os.path.join("tmp", file), os.path.join("tmp", ''.join([str(index), '.mp3'])))
         
         return 'dwnMusicOk'
