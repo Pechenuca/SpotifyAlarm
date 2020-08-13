@@ -6,6 +6,7 @@ from pygame import mixer
 import os
 import time
 import datetime
+import shutil
 
 mixer.init()
 class AlarmChecker(Thread):
@@ -112,7 +113,7 @@ class ComandManager(object):
         """
         удалить папку с музыкой
         """
-        pass
+        shutil.rmtree('tmp')
     
     def shAlarm(self, atr):
         """
