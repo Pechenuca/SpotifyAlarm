@@ -1,5 +1,10 @@
 from ComandManager import ComandManager
+from ComandManager import AlarmChecker
 import asyncio
+
+thread = AlarmChecker(daemon=True)
+thread.start()
+
 
 def cWork(c):
     com = ComandManager(c)

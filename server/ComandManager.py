@@ -1,12 +1,72 @@
 from SpotifyParser import SpotifyParser 
 from MusicDownloader import MusicDownloader
-from Alarm import Alarm
+from Db import Db 
+from threading import Thread
+from pygame import mixer 
+import os
+import time
+import datetime
+
+
+
+mixer.init()
+class AlarmChecker(Thread):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_running = True
+        self.dbClass = Db()
+        self.dbClass.create()
+
+    def timeChecker(self):
+        dateNow = datetime.datetime.now()
+        res = self.dbClass.select('all')
+        print(res)
+        if (res != []):
+            for i in range(0, len(res)):
+                dateListDb = []
+                dateListNow = []
+                count = 0
+
+                for j in range(0, 5):
+                    dateListDb.append(int(res[i][1].split('-')[j]))
+
+                for attr in [ 'year', 'month', 'day', 'hour', 'minute']:
+                    dateListNow.append(getattr(dateNow, attr))
+
+                for z in range(0, len(dateListDb)):
+                    if (dateListNow[z] == dateListDb[z]):
+                        count = count + 1
+
+                if (count == 5):
+                    tmpFiles = os.listdir("tmp")
+                    
+                    for i in range(len(tmpFiles)):
+                        mixer.music.load('tmp/' + tmpFiles[i])
+                        mixer.music.play()
+                    
+                        while mixer.music.get_busy():
+                            time.sleep(1)
+                
+            print(count)
+        else:
+            self.terminate()
+        
+
+    def run(self):
+        while self.is_running:
+            self.timeChecker()
+            time.sleep(2)
+
+    def terminate(self):
+        self.is_running = False
 
 class ComandManager(object):
     
     def __init__(self, com):
         self.com = com
-        self.alarmClass = Alarm()
+        self.dbClass = Db()
+        self.dbClass.create()
+        
     
     def checkAtrs(self, atr):
         try:
@@ -35,12 +95,16 @@ class ComandManager(object):
             if(self.checkAtrs(self.com) != 0):
                 return self.dwnMusic(self.com[1])
         
+        elif(self.com[0] == 'stopMusic'):
+            if(self.checkAtrs(self.com) == 0):
+                return self.stopMusic()
+        
     
     def setAlarm(self, atr):
         """
         поставить будильник
         """
-        self.alarmClass.setAlarm(atr)
+        self.dbClass.insert(atr)
 
         return 'setAlarmOk'
     
@@ -48,7 +112,7 @@ class ComandManager(object):
         """
         удалить будильник
         """
-        self.alarmClass.delAlarm(atr)
+        self.dbClass.delete(atr)
 
         return 'delAlarmOk'
 
@@ -62,8 +126,16 @@ class ComandManager(object):
         """
         показать будильники
         """
-        res = self.alarmClass.showAlarm(atr)
+        res = self.dbClass.select(atr)
         return str(res)
+
+
+    def stopMusic(self):
+        """
+        Остановить будильник
+        """
+        mixer.music.stop()
+        return 'stopMusicOk'
         
     
     def dwnMusic(self, playlistId):

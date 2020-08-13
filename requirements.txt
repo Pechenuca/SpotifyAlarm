@@ -3,4 +3,4 @@ youtube-dl
 youtube-search==1.1.0
 requests==2.24.0
 asyncio
-playsounds
+pygame
