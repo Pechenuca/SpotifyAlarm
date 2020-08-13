@@ -26,7 +26,6 @@ class Db(object):
 
 
     def select(self, id):
-        #FIX ME
         db = self.connect()
         if(id != 'all'):
             res = db.cursor().execute("SELECT * FROM spotifyAlarms WHERE ('%s')" % id).fetchall()

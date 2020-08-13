@@ -4,3 +4,5 @@ youtube-search==1.1.0
 requests==2.24.0
 asyncio
 pygame
+hypothesis==3.73.1
+pytest

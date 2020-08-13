@@ -16,5 +16,6 @@ and you also need installed ffmpeg in your path
 
 ## TODO
 
- + (server) need to check for bugs
+ + (server) need to check for bugs working on tests 
  + begin working on client
+

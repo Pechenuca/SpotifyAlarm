@@ -8,7 +8,6 @@ import time
 # author mar4elkin
 #--------------------#
 
-#todo придумать как отсортировать папку tmp и не забыть про ее удаление !
 
 class MusicDownloader(object):
     def __init__(self, request):
@@ -20,9 +19,14 @@ class MusicDownloader(object):
         return url
         
     
-    def dnSong(self, links):
+    def dnSong(self, links, dirr=''):
+        if dirr == '':
+            toDir = 'tmp/%(title)s.%(ext)s'
+        else:
+            toDir = dirr + '/%(title)s.%(ext)s'
+
         ydl_opts = {
-            'outtmpl': 'tmp/%(title)s.%(ext)s',
+            'outtmpl': toDir,
             'format': 'bestaudio/best',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
