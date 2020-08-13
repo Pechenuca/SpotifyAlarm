@@ -7,8 +7,6 @@ import os
 import time
 import datetime
 
-
-
 mixer.init()
 class AlarmChecker(Thread):
     def __init__(self, *args, **kwargs):
@@ -20,7 +18,6 @@ class AlarmChecker(Thread):
     def timeChecker(self):
         dateNow = datetime.datetime.now()
         res = self.dbClass.select('all')
-        print(res)
         if (res != []):
             for i in range(0, len(res)):
                 dateListDb = []
@@ -38,6 +35,7 @@ class AlarmChecker(Thread):
                         count = count + 1
 
                 if (count == 5):
+                    self.dbClass.delete(res[0])
                     tmpFiles = os.listdir("tmp")
                     
                     for i in range(len(tmpFiles)):
@@ -134,7 +132,9 @@ class ComandManager(object):
         """
         Остановить будильник
         """
-        mixer.music.stop()
+        mixer.quit()
+        time.sleep(60)
+        mixer.init()
         return 'stopMusicOk'
         
     

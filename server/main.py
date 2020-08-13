@@ -2,13 +2,16 @@ from ComandManager import ComandManager
 from ComandManager import AlarmChecker
 import asyncio
 
-thread = AlarmChecker(daemon=True)
-thread.start()
+def turnOndemon():
+    thread = AlarmChecker(daemon=True)
+    thread.start()
 
+turnOndemon()
 
 def cWork(c):
     com = ComandManager(c)
     coman = com.commandSelect()
+    turnOndemon()
     return coman
 
 async def handle_echo(reader, writer):
