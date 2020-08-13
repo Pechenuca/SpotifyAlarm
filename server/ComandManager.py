@@ -81,28 +81,22 @@ class ComandManager(object):
              if(self.checkAtrs(self.com) != 0):
                 return self.setAlarm(self.com[1])
 
-        elif(self.com[0] == 'clsTmp'):
-            if(self.checkAtrs(self.com) == 0):
-                return self.clsTmp()
-
         elif(self.com[0] == 'shAlarm'):
             if(self.checkAtrs(self.com) != 0):
                 return self.shAlarm(self.com[1])
-
-        elif(self.com[0] == 'dwnMusic'):
-            if(self.checkAtrs(self.com) != 0):
-                return self.dwnMusic(self.com[1])
         
         elif(self.com[0] == 'stopMusic'):
             if(self.checkAtrs(self.com) == 0):
                 return self.stopMusic()
         
     
-    def setAlarm(self, atr):
+    def setAlarm(self, *args):
         """
         поставить будильник
         """
-        self.dbClass.insert(atr)
+        
+        self.dbClass.insert(args[0])
+        self.dwnMusic(args[1])
 
         return 'setAlarmOk'
     
@@ -134,6 +128,7 @@ class ComandManager(object):
         """
         mixer.quit()
         time.sleep(60)
+        self.clsTmp()
         mixer.init()
         return 'stopMusicOk'
         
