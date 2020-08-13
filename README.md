@@ -11,7 +11,7 @@ and you also need installed ffmpeg in your path
 
 ## Progress
     | server        | client_qt     | ios     |     android |
-    | ------------- | ------------- | -------------   -------------
+    | ------------- | ------------- | ------------- |  ------------- |
     |  ✔  | ✖  | ✖  | ✖  |
 
 ## TODO
