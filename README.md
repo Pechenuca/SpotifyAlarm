@@ -6,10 +6,22 @@ Wake up with your spotify playlist
 
 ## Install
 
+### SDL
+```
+sudo apt-get install libsdl-dev libsdl-image1.2-dev \
+libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsmpeg-dev libportmidi-dev \
+libavformat-dev libswscale-dev libjpeg-dev libfreetype6-dev
+```
+
+### ffmpeg
+```
+sudo apt-get install ffmpeg
+```
+
+### pip 
 ```
 pip install -r requirements.txt
 ```
-and you also need installed ffmpeg in your path 
 
 ## Progress
 | server        | client_qt     | ios     |     android |
