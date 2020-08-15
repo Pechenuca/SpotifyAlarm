@@ -1,4 +1,4 @@
-https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_NAME>/badge.svg
+https://github.com/Pechenuca/SpotifyAlarm/workflows/Python package/badge.svg
 
 # SpotifyAlarm
 
