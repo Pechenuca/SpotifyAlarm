@@ -1,4 +1,4 @@
-https://github.com/Pechenuca/SpotifyAlarm/workflows/Python package/badge.svg
+[![Actions Status](https://github.com/Pechenuca/SpotifyAlarm/workflows/PythonTests/badge.svg)](https://github.com/Pechenuca/SpotifyAlarm/actions)
 
 # SpotifyAlarm
 
