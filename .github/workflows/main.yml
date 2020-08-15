@@ -12,6 +12,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Set up SLD-1.2
+      run: |
+          wget http://www.libsdl.org/release/SDL-1.2.14.tar.gz
+          tar -xzvf SDL-1.2.14.tar.gz
+          cd SDL-1.2.14
+          ./configure 
+          sudo make all
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
