@@ -23,6 +23,8 @@ sudo apt-get install ffmpeg
 pip install -r requirements.txt
 ```
 
+or just install it with setup.sh
+
 ## Progress
 | server        | client_qt     | ios     |     android |
 | ------------- | ------------- | ------------- |  ------------- |
