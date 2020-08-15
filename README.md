@@ -1,3 +1,5 @@
+https://github.com/<OWNER>/<REPOSITORY>/workflows/<WORKFLOW_NAME>/badge.svg
+
 # SpotifyAlarm
 
 Wake up with your spotify playlist 
