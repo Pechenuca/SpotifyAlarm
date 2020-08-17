@@ -1,5 +1,6 @@
 from ComandManager import ComandManager
 from ComandManager import AlarmChecker
+import socket
 import asyncio
 
 def turnOndemon():
@@ -28,7 +29,7 @@ async def handle_echo(reader, writer):
     writer.close()
 
 loop = asyncio.get_event_loop()
-coro = asyncio.start_server(handle_echo, '127.0.0.1', 5005, loop=loop)
+coro = asyncio.start_server(handle_echo, socket.gethostbyname(socket.gethostname()), 5005, loop=loop)
 server = loop.run_until_complete(coro)
 
 
