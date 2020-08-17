@@ -49,8 +49,4 @@ class NetScaner(object):
         
 
 
-    
-
-nt = NetScaner()
-nt.scanIps(nt.iplist())
 

@@ -21,7 +21,7 @@ async def handle_echo(reader, writer):
     addr = writer.get_extra_info('peername')
     print("Received %r from %r" % (message, addr))
     
-    print("Send: %r" % message)
+    print("Send: %r" % cWork(message)
     writer.write(bytes(cWork(message), encoding='UTF-8'))
     await writer.drain()
 
