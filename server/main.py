@@ -28,8 +28,13 @@ async def handle_echo(reader, writer):
     print("Close the client socket")
     writer.close()
 
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+print()
+s.close()
+
 loop = asyncio.get_event_loop()
-coro = asyncio.start_server(handle_echo, socket.gethostbyname(socket.gethostname()), 5005, loop=loop)
+coro = asyncio.start_server(handle_echo, s.getsockname()[0], 5005, loop=loop)
 server = loop.run_until_complete(coro)
 
 
