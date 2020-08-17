@@ -74,9 +74,12 @@ class ComandManager(object):
             return 0
     
     def commandSelect(self):
+        if(self.com[0] == ''):
+            return 'Hello from server'
         if(self.com[0] == 'setAlarm'):
             if(self.checkAtrs(self.com) != 0):
-                return self.setAlarm(self.com[1])
+                alarmArgs = [ self.com[1], self.com[2] ]
+                return self.setAlarm(alarmArgs)
 
         elif(self.com[0] == 'delAlarm'):
              if(self.checkAtrs(self.com) != 0):
