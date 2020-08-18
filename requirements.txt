@@ -7,3 +7,7 @@ pygame
 hypothesis==3.73.1
 pytest
 progress
+pytest-cov
+pytest-subprocess
+codecov
+coloredlogs
