@@ -1,6 +1,5 @@
 [![Actions Status](https://github.com/Pechenuca/SpotifyAlarm/workflows/PythonTests/badge.svg)](https://github.com/Pechenuca/SpotifyAlarm/actions)
-[![codecov.io](https://codecov.io/github/Pechenuca/SpotifyAlarm/coverage.svg?branch=master)]
-(https://codecov.io/github/Pechenuca/SpotifyAlarm?branch=master)
+[![codecov.io](https://codecov.io/github/Pechenuca/SpotifyAlarm/coverage.svg?branch=master)](https://codecov.io/github/Pechenuca/SpotifyAlarm?branch=master)
 
 # SpotifyAlarm
 
