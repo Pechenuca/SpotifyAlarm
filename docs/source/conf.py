@@ -19,6 +19,7 @@ import sphinx_glpi_theme
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../../server')
 from Db import *
+from Server import *
 from MusicDownloader import *
 from SpotifyParser import *
 from ComandManager import *

@@ -4,6 +4,9 @@
 .. toctree::
    :maxdepth: 6
 
+.. automodule:: Server
+    :members:
+
 .. automodule:: MusicDownloader
     :members:
 
