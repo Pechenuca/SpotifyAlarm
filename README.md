@@ -5,7 +5,7 @@
 
 Wake up with your spotify playlist 
 
-[Документация](https://pechenuca.github.io/SpotifyAlarm/build/html/)
+[Документация](https://pechenuca.github.io/SpotifyAlarm/docs/build/html/)
 
 ## Progress
 | server        | client_qt     | ios     |     android |
