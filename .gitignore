@@ -3,3 +3,5 @@ tmp
 database.db
 .hypothesis
 .pytest_cache
+.tox
+UNKNOWN.egg-info
