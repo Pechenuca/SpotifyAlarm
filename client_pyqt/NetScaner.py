@@ -16,12 +16,12 @@ class NetScaner(object):
         """
         localip = gethostbyname(gethostname()).split('.')
         ipPattern = localip[0] + '.' + localip[1] + '.' + localip[2] + '.'
-        ipTable = []
+        ipTable = ['127.0.0.1']
 
         for i in range(0, ipMaxValue):
             ipTable.append(ipPattern + str(i))
 
-        ipTable.append('127.0.0.1')
+        #ipTable.append('127.0.0.1')
         
         return ipTable
 
@@ -55,9 +55,8 @@ class NetScaner(object):
             else:
                 break
                 bar.finish()
-                return pfres  
         bar.finish()
-        return 0
+        return pfres  
         
 
 
