@@ -10,6 +10,9 @@ import shutil
 
 mixer.init()
 class AlarmChecker(Thread):
+    """
+    Класс для работы с будильником
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.is_running = True
@@ -17,6 +20,9 @@ class AlarmChecker(Thread):
         self.dbClass.create()
 
     def timeChecker(self):
+        """
+        Метод для проверки времени, значение берет из бд
+        """
         dateNow = datetime.datetime.now()
         res = self.dbClass.select('all')
         if (res != []):
@@ -52,15 +58,23 @@ class AlarmChecker(Thread):
         
 
     def run(self):
+        """
+        Метод запускает цикл
+        """
         while self.is_running:
             self.timeChecker()
             time.sleep(2)
 
     def terminate(self):
+        """
+        Метод останавливает трэд
+        """
         self.is_running = False
 
 class ComandManager(object):
-    
+    """
+    Класс обработчик команд клиента
+    """
     def __init__(self, com):
         self.com = com
         self.dbClass = Db()
@@ -68,12 +82,18 @@ class ComandManager(object):
         
     
     def checkAtrs(self, atr):
+        """
+        Проверка цельности комманды
+        """
         try:
             atr[1]
         except IndexError:
             return 0
     
     def commandSelect(self):
+        """
+        Метод который выполняет нужный метод исходя из команды
+        """
         if(self.com[0] == ''):
             return 'Hello from server'
         if(self.com[0] == 'setAlarm'):

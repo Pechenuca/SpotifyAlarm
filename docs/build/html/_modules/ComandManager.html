@@ -1,0 +1,414 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ComandManager &mdash; документация SpotifyParser </title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/jquery.fancybox.min.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../_static/glpi.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Алфавитный указатель"
+              href="../genindex.html"/>
+        <link rel="search" title="Поиск" href="../search.html"/>
+    <link rel="top" title="документация SpotifyParser " href="../index.html"/>
+        <link rel="up" title="Код модуля" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SpotifyParser
+          
+
+          
+          </a>
+
+          
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Установка</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../client.html">Клиент python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../server.html">Сервер</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SpotifyParser</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Код модуля</a> &raquo;</li>
+        
+      <li>ComandManager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Исходный код ComandManager</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">SpotifyParser</span> <span class="k">import</span> <span class="n">SpotifyParser</span> 
+<span class="kn">from</span> <span class="nn">MusicDownloader</span> <span class="k">import</span> <span class="n">MusicDownloader</span>
+<span class="kn">from</span> <span class="nn">Db</span> <span class="k">import</span> <span class="n">Db</span> 
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">pygame</span> <span class="k">import</span> <span class="n">mixer</span> 
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">mixer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<div class="viewcode-block" id="AlarmChecker"><a class="viewcode-back" href="../server.html#ComandManager.AlarmChecker">[документация]</a><span class="k">class</span> <span class="nc">AlarmChecker</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс для работы с будильником</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_running</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span> <span class="o">=</span> <span class="n">Db</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AlarmChecker.timeChecker"><a class="viewcode-back" href="../server.html#ComandManager.AlarmChecker.timeChecker">[документация]</a>    <span class="k">def</span> <span class="nf">timeChecker</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод для проверки времени, значение берет из бд</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dateNow</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">!=</span> <span class="p">[]):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)):</span>
+                <span class="n">dateListDb</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">dateListNow</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+                    <span class="n">dateListDb</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="n">j</span><span class="p">]))</span>
+
+                <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;day&#39;</span><span class="p">,</span> <span class="s1">&#39;hour&#39;</span><span class="p">,</span> <span class="s1">&#39;minute&#39;</span><span class="p">]:</span>
+                    <span class="n">dateListNow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">dateNow</span><span class="p">,</span> <span class="n">attr</span><span class="p">))</span>
+
+                <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dateListDb</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">dateListNow</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="o">==</span> <span class="n">dateListDb</span><span class="p">[</span><span class="n">z</span><span class="p">]):</span>
+                        <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">5</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">tmpFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+                    
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmpFiles</span><span class="p">)):</span>
+                        <span class="n">mixer</span><span class="o">.</span><span class="n">music</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;tmp/&#39;</span> <span class="o">+</span> <span class="n">tmpFiles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="n">mixer</span><span class="o">.</span><span class="n">music</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+                    
+                        <span class="k">while</span> <span class="n">mixer</span><span class="o">.</span><span class="n">music</span><span class="o">.</span><span class="n">get_busy</span><span class="p">():</span>
+                            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                
+            <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span></div>
+        
+
+<div class="viewcode-block" id="AlarmChecker.run"><a class="viewcode-back" href="../server.html#ComandManager.AlarmChecker.run">[документация]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод запускает цикл</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timeChecker</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlarmChecker.terminate"><a class="viewcode-back" href="../server.html#ComandManager.AlarmChecker.terminate">[документация]</a>    <span class="k">def</span> <span class="nf">terminate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод останавливает трэд</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_running</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+
+<div class="viewcode-block" id="ComandManager"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager">[документация]</a><span class="k">class</span> <span class="nc">ComandManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс обработчик команд клиента</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">com</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">com</span> <span class="o">=</span> <span class="n">com</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span> <span class="o">=</span> <span class="n">Db</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+        
+    
+<div class="viewcode-block" id="ComandManager.checkAtrs"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.checkAtrs">[документация]</a>    <span class="k">def</span> <span class="nf">checkAtrs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Проверка цельности комманды</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">atr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span></div>
+    
+<div class="viewcode-block" id="ComandManager.commandSelect"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.commandSelect">[документация]</a>    <span class="k">def</span> <span class="nf">commandSelect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Метод который выполняет нужный метод исходя из команды</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s1">&#39;Hello from server&#39;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;setAlarm&#39;</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checkAtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">alarmArgs</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="p">]</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setAlarm</span><span class="p">(</span><span class="n">alarmArgs</span><span class="p">)</span>
+
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;delAlarm&#39;</span><span class="p">):</span>
+             <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checkAtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setAlarm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;shAlarm&#39;</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checkAtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shAlarm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;stopMusic&#39;</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checkAtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stopMusic</span><span class="p">()</span></div>
+        
+    
+<div class="viewcode-block" id="ComandManager.setAlarm"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.setAlarm">[документация]</a>    <span class="k">def</span> <span class="nf">setAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        поставить будильник</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dwnMusic</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="s1">&#39;setAlarmOk&#39;</span></div>
+    
+<div class="viewcode-block" id="ComandManager.delAlarm"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.delAlarm">[документация]</a>    <span class="k">def</span> <span class="nf">delAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        удалить будильник</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">atr</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s1">&#39;delAlarmOk&#39;</span></div>
+
+<div class="viewcode-block" id="ComandManager.clsTmp"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.clsTmp">[документация]</a>    <span class="k">def</span> <span class="nf">clsTmp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        удалить папку с музыкой</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s1">&#39;tmp&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="ComandManager.shAlarm"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.shAlarm">[документация]</a>    <span class="k">def</span> <span class="nf">shAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        показать будильники</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">atr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ComandManager.stopMusic"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.stopMusic">[документация]</a>    <span class="k">def</span> <span class="nf">stopMusic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Остановить будильник</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mixer</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clsTmp</span><span class="p">()</span>
+        <span class="n">mixer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s1">&#39;stopMusicOk&#39;</span></div>
+        
+    
+<div class="viewcode-block" id="ComandManager.dwnMusic"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.dwnMusic">[документация]</a>    <span class="k">def</span> <span class="nf">dwnMusic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">playlistId</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        скачать музыку</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">#get playlist</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SpotifyParser</span><span class="p">(</span><span class="n">playlistId</span><span class="p">)</span> <span class="c1">#&#39;5VFBiAtuHsUK7FFxYkKJ9u&#39;</span>
+        <span class="n">spotifySongsArray</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">getSongs</span><span class="p">()</span>
+
+        <span class="c1">#donload songs</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spotifySongsArray</span><span class="p">)):</span>
+            <span class="n">md</span> <span class="o">=</span> <span class="n">MusicDownloader</span><span class="p">(</span><span class="n">spotifySongsArray</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">toDownload</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">findVideo</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">toDownload</span><span class="p">)</span>
+            <span class="n">md</span><span class="o">.</span><span class="n">dnSong</span><span class="p">(</span><span class="n">toDownload</span><span class="p">)</span>
+        
+        <span class="c1">#rename all files</span>
+
+        <span class="n">tmpFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tmpFiles</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="s1">&#39;.mp3&#39;</span><span class="p">])))</span>
+        
+        <span class="k">return</span> <span class="s1">&#39;dwnMusicOk&#39;</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, mar4elkin.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'ru',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/language_data.js"></script>
+      <script type="text/javascript" src="../_static/translations.js"></script>
+      <script type="text/javascript" src="../_static/jquery.fancybox.min.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+  
+  <script type="text/javascript">
+    $(function(){
+      $('.image-reference').fancybox();
+    })
+  </script>
+
+</body>
+</html>

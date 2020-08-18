@@ -11,15 +11,26 @@ import requests
 
 
 class SpotifyParser(object):
+    """
+    Класс для работы со spotify.
+    На вход принимает конец ссылки на плейлист 
+    """
     
     def __init__(self, playListId ):
         self.playListId = 'https://open.spotify.com/playlist/'+ playListId
         self.page = requests.get(self.playListId)
+
     
     def statusCode(self):
+        """
+        Производит проверку подключения к сайту
+        """
         return int(self.page.status_code)
     
     def getSongs(self):
+        """
+        Парсинг страницы с альбомом
+        """
         if self.statusCode() == 200:
             
             soup = BeautifulSoup(self.page.text, "html.parser")

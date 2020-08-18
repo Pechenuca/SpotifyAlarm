@@ -4,10 +4,16 @@ import time
 from multiprocessing.pool import ThreadPool
 
 class NetScaner(object):
+    """
+    Класс для сканирования портов в локальной сети
+    """
     def __init__(self, *args,):
         super().__init__(*args)
 
     def iplist(self, ipMaxValue=255):
+        """
+        Определение и запись локальных ip
+        """
         localip = gethostbyname(gethostname()).split('.')
         ipPattern = localip[0] + '.' + localip[1] + '.' + localip[2] + '.'
         ipTable = []
@@ -20,6 +26,9 @@ class NetScaner(object):
         return ipTable
 
     def portChecker(self, ip):
+        """
+        Метод для проверки портов на их доступность
+        """
         s = socket(AF_INET, SOCK_STREAM)
         s.settimeout(0.3)
         conn = s.connect_ex((ip, 5005))
@@ -31,6 +40,9 @@ class NetScaner(object):
             return 0
     
     def scanIps(self, ipTable):
+        """
+        Метод для выполнения всех этапов сканирования
+        """
         pool = ThreadPool(processes=4)
         suffix = '%(percent)d%% [%(elapsed_td)s / %(eta)d / %(eta_td)s]'
         bar = IncrementalBar('scanning', max = len(ipTable), suffix=suffix)

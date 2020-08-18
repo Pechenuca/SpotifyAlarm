@@ -10,16 +10,25 @@ import time
 
 
 class MusicDownloader(object):
+    """
+    Класс для скачивания музыки с youtube
+    """
     def __init__(self, request):
         self.request = request
     
     def findVideo(self):
+        """
+        Выполняет поиск по youtube
+        """
         ytSearch = YoutubeSearch(self.request, max_results=1).to_dict()[0].get('url_suffix')
         url = 'https://www.youtube.com' + ytSearch
         return url
         
     
     def dnSong(self, links, dirr=''):
+        """
+        Скачивает аудио-дорожку из youtube в выбранную папку
+        """
         if dirr == '':
             toDir = 'tmp/%(title)s.%(ext)s'
         else:
