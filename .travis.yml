@@ -17,7 +17,10 @@ install:
   - pip install -r requirements.txt 
 
 script:
-  - pytest
+  - pytest --cov-report term --cov=app/test/
+
+env:
+  - CODECOV_TOKEN=f478265b-717e-44dd-9c6a-beb4c0ae95a0
 
 after_success:
   - codecov #
