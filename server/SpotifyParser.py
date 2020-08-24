@@ -1,4 +1,3 @@
-from proxy_requests import ProxyRequests, ProxyRequestsBasicAuth
 from bs4 import BeautifulSoup
 import requests
 
