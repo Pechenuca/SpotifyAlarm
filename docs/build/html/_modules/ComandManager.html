@@ -209,7 +209,6 @@
                         <span class="k">while</span> <span class="n">mixer</span><span class="o">.</span><span class="n">music</span><span class="o">.</span><span class="n">get_busy</span><span class="p">():</span>
                             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 
-            <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span></div>
         
@@ -251,7 +250,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Метод который выполняет нужный метод исходя из команды</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;test&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="s1">&#39;Hello from server&#39;</span>
         <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;setAlarm&#39;</span><span class="p">):</span>
             <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">checkAtrs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">com</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
@@ -276,10 +275,17 @@
 <span class="sd">        поставить будильник</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dwnMusic</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">resdwnMusic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dwnMusic</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span>  <span class="n">resdwnMusic</span> <span class="o">==</span> <span class="s1">&#39;dwnMusicOk&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dbClass</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span> <span class="s1">&#39;setAlarmOk&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">resdwnMusic</span></div>
 
-        <span class="k">return</span> <span class="s1">&#39;setAlarmOk&#39;</span></div>
+
+        <span class="c1">#Нужно переработать скачивание тк юзер может скачать сразу несколько</span>
+
+        
     
 <div class="viewcode-block" id="ComandManager.delAlarm"><a class="viewcode-back" href="../server.html#ComandManager.ComandManager.delAlarm">[документация]</a>    <span class="k">def</span> <span class="nf">delAlarm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atr</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -322,22 +328,28 @@
         <span class="c1">#get playlist</span>
         <span class="n">sp</span> <span class="o">=</span> <span class="n">SpotifyParser</span><span class="p">(</span><span class="n">playlistId</span><span class="p">)</span> <span class="c1">#&#39;5VFBiAtuHsUK7FFxYkKJ9u&#39;</span>
         <span class="n">spotifySongsArray</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">getSongs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">spotifySongsArray</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">sparr</span> <span class="o">=</span> <span class="n">spotifySongsArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1">#donload songs</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">()):</span>
+                <span class="n">md</span> <span class="o">=</span> <span class="n">MusicDownloader</span><span class="p">(</span><span class="n">sparr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">toDownload</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">findVideo</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">toDownload</span><span class="p">)</span>
+                <span class="n">md</span><span class="o">.</span><span class="n">dnSong</span><span class="p">(</span><span class="n">toDownload</span><span class="p">)</span>
+            
+            <span class="c1">#rename all files</span>
 
-        <span class="c1">#donload songs</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">spotifySongsArray</span><span class="p">)):</span>
-            <span class="n">md</span> <span class="o">=</span> <span class="n">MusicDownloader</span><span class="p">(</span><span class="n">spotifySongsArray</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">toDownload</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">findVideo</span><span class="p">()</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">toDownload</span><span class="p">)</span>
-            <span class="n">md</span><span class="o">.</span><span class="n">dnSong</span><span class="p">(</span><span class="n">toDownload</span><span class="p">)</span>
-        
-        <span class="c1">#rename all files</span>
+            <span class="n">tmpFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
 
-        <span class="n">tmpFiles</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tmpFiles</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="s1">&#39;.mp3&#39;</span><span class="p">])))</span>
+            
+            <span class="k">return</span> <span class="s1">&#39;dwnMusicOk&#39;</span>
+            
+        <span class="k">elif</span> <span class="n">spotifySongsArray</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;problem with spotify&#39;</span></div></div>
 
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tmpFiles</span><span class="p">):</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="s1">&#39;.mp3&#39;</span><span class="p">])))</span>
-        
-        <span class="k">return</span> <span class="s1">&#39;dwnMusicOk&#39;</span></div></div>
+
 </pre></div>
 
            </div>

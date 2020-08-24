@@ -155,7 +155,8 @@
            <div itemprop="articleBody">
             
   <h1>Исходный код SpotifyParser</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span>
+<span></span><span class="kn">from</span> <span class="nn">proxy_requests</span> <span class="k">import</span> <span class="n">ProxyRequests</span><span class="p">,</span> <span class="n">ProxyRequestsBasicAuth</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="c1">#--------------------#</span>
@@ -183,7 +184,7 @@
 <span class="sd">        Производит проверку подключения к сайту</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span></div>
-    
+
 <div class="viewcode-block" id="SpotifyParser.getSongs"><a class="viewcode-back" href="../server.html#SpotifyParser.SpotifyParser.getSongs">[документация]</a>    <span class="k">def</span> <span class="nf">getSongs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Парсинг страницы с альбомом</span>
@@ -202,14 +203,10 @@
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">songsArtist</span><span class="p">)):</span>
                 <span class="n">songs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">songs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="n">songsArtist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;•&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
-            <span class="k">return</span> <span class="n">songs</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">songs</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s1">&#39;Spotify banned our ip :(&#39;</span></div></div>
-    
-    
-
-    
+            <span class="k">return</span> <span class="p">(</span><span class="s1">&#39;status code: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">statusCode</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39; url: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">playListId</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
