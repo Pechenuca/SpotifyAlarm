@@ -9,9 +9,11 @@ SpotifyParser
 
 
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 24
 
    install
+
+   startup
 
    client
 

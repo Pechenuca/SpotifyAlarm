@@ -3,7 +3,7 @@
 
 
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 24
 
 .. automodule:: Connector
     :members:
