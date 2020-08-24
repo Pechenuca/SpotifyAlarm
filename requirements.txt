@@ -11,3 +11,4 @@ pytest-cov
 pytest-subprocess
 codecov
 coloredlogs
+PyQt5

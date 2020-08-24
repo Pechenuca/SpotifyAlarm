@@ -1,3 +1,4 @@
+from proxy_requests import ProxyRequests, ProxyRequestsBasicAuth
 from bs4 import BeautifulSoup
 import requests
 
@@ -26,7 +27,7 @@ class SpotifyParser(object):
         Производит проверку подключения к сайту
         """
         return int(self.page.status_code)
-    
+
     def getSongs(self):
         """
         Парсинг страницы с альбомом
@@ -45,11 +46,7 @@ class SpotifyParser(object):
             for i in range(0, len(songsArtist)):
                 songs[i] = songs[i] + " - " + songsArtist[i].text.split("•")[0].strip()
 
-            return songs
+            return (songs, 1)
 
         else:
-            return 'Spotify banned our ip :('
-    
-    
-
-    
+            return ('status code: ' + str(self.statusCode()) + ' url: ' + self.playListId, 0)

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SpotifyParser</class>
+ <widget class="QMainWindow" name="SpotifyParser">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>386</width>
+    <height>401</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>361</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Поставить будильник</string>
+    </property>
+    <widget class="QDateTimeEdit" name="alarmTime">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>321</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="displayFormat">
+      <string>yyyy.MM.dd H:mm</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>41</y>
+       <width>321</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="placeholderText">
+      <string>Id spotify плейлиста</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>361</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Доступные будильники</string>
+    </property>
+    <widget class="QListWidget" name="listWidget">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>20</y>
+       <width>341</width>
+       <height>131</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>330</y>
+      <width>271</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>330</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отпрваить</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>386</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSpotifyParser">
+    <property name="title">
+     <string>SpotifyParser</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuSpotifyParser"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

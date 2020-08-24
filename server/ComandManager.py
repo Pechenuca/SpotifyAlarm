@@ -52,7 +52,6 @@ class AlarmChecker(Thread):
                         while mixer.music.get_busy():
                             time.sleep(1)
                 
-            print(count)
         else:
             self.terminate()
         
@@ -94,7 +93,7 @@ class ComandManager(object):
         """
         Метод который выполняет нужный метод исходя из команды
         """
-        if(self.com[0] == ''):
+        if(self.com[0] == '' or self.com[0] == 'test'):
             return 'Hello from server'
         if(self.com[0] == 'setAlarm'):
             if(self.checkAtrs(self.com) != 0):
@@ -119,10 +118,17 @@ class ComandManager(object):
         поставить будильник
         """
         
-        self.dbClass.insert(args[0])
-        self.dwnMusic(args[1])
+        resdwnMusic = self.dwnMusic(args[0][1])
+        if  resdwnMusic == 'dwnMusicOk':
+            self.dbClass.insert(args[0][0])
+            return 'setAlarmOk'
+        else:
+            return resdwnMusic
 
-        return 'setAlarmOk'
+
+        #Нужно переработать скачивание тк юзер может скачать сразу несколько
+
+        
     
     def delAlarm(self, atr):
         """
@@ -165,19 +171,25 @@ class ComandManager(object):
         #get playlist
         sp = SpotifyParser(playlistId) #'5VFBiAtuHsUK7FFxYkKJ9u'
         spotifySongsArray = sp.getSongs()
+        if spotifySongsArray[1] == 1:
+            sparr = spotifySongsArray[0]
+            #donload songs
+            for i in range(0, len()):
+                md = MusicDownloader(sparr[i])
+                toDownload = md.findVideo()
+                print(toDownload)
+                md.dnSong(toDownload)
+            
+            #rename all files
 
-        #donload songs
-        for i in range(0, len(spotifySongsArray)):
-            md = MusicDownloader(spotifySongsArray[i])
-            toDownload = md.findVideo()
-            print(toDownload)
-            md.dnSong(toDownload)
-        
-        #rename all files
+            tmpFiles = os.listdir("tmp")
 
-        tmpFiles = os.listdir("tmp")
+            for index, file in enumerate(tmpFiles):
+                os.rename(os.path.join("tmp", file), os.path.join("tmp", ''.join([str(index), '.mp3'])))
+            
+            return 'dwnMusicOk'
+            
+        elif spotifySongsArray[1] == 0:
+            return 'problem with spotify'
 
-        for index, file in enumerate(tmpFiles):
-            os.rename(os.path.join("tmp", file), os.path.join("tmp", ''.join([str(index), '.mp3'])))
-        
-        return 'dwnMusicOk'
+
