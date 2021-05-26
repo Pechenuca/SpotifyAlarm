@@ -1,14 +1,2 @@
-beautifulsoup4==4.8.2
-youtube-dl
-youtube-search==1.1.0
-requests==2.24.0
-asyncio
-pygame
-hypothesis==3.73.1
-pytest
-progress
-pytest-cov
-pytest-subprocess
-codecov
-coloredlogs
-PyQt5
+peewee
+flask-restful

@@ -1,13 +1,1 @@
 __pycache__
-tmp
-database.db
-.hypothesis
-.pytest_cache
-.tox
-UNKNOWN.egg-info
-.coverage
-cov_html
-cov_annotate
-cov.xml
-coverage.xml
-vendor
