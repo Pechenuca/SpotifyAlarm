@@ -4,16 +4,20 @@ from utils import organizer
 from flask import request, jsonify
 
 class BasicRoots(Resource):
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.db_wrapper = DataBaseWrapper(Requset)
+
     """
     Базовый роутер (ресурс)
     """
-    def get(self):
+    def get(self) -> list:
         """
         Get запрос.\n
         Выводит все доступные запросы(будильники).
         """
-        db_wrapper = DataBaseWrapper(Requset)
-        return organizer(db_wrapper.select_all())
+        return organizer(self.db_wrapper.select_all())
     
     def post(self) -> str:
         """
@@ -31,9 +35,25 @@ class BasicRoots(Resource):
         except Exception as e:
             return f"Check your request! Missing {e}"
 
-        db_wrapper = DataBaseWrapper(Requset)
-        db_wrapper.insert(alarm_time=alarm, playlist=playlist, is_worked=is_worked)
+        self.db_wrapper.insert(alarm_time=alarm, playlist=playlist, is_worked=is_worked)
         return f"Data added to database!"
+    
+    def delete(self) -> str:
+        """
+        Delete запрос.\n
+        Удаляет запись из таблицы по id.
+        Пример запроса: {"id": 0}.\n
+        В случае ошибки в запросе возращяет Exception.
+        """
+        json_data = request.get_json(force=True)
+
+        try:
+            row_id = json_data["id"]
+        except Exception as e:
+            return f"Check your request! Missing {e}"
+        
+        self.db_wrapper.delete_by_id(int(row_id))
+        return f"Data removed from database!"
         
         
 
