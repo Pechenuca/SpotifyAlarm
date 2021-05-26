@@ -16,7 +16,9 @@ class Requset(BaseModel):
         дату когда должен сработать будильник.\n
         ссылку на плей-лист.\n
         сработал ли запрос.\n
+        скачен ли плейлист.\n
     """
     alarm_time = DateTimeField()
     playlist = CharField()
     is_worked = BooleanField()
+    downloaded = BooleanField()

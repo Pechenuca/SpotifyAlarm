@@ -1,13 +1,14 @@
 from datetime import datetime
 from dotenv import load_dotenv
 from .Exceptions import *
+import threading
 import os
 
 def is_date_actual(dataBaseDatetime: datetime) -> bool:
     """
     Функция для проверки времяни.
     """
-    return dataBaseDatetime > datetime.now()
+    return dataBaseDatetime == datetime.now()
 
 def organizer(query: str) -> list:
     """
@@ -79,4 +80,20 @@ def get_playlist_data(sp: dict) -> list:
         "cover": sp["images"][0]["url"]
     }
 
+def start_thread(func: function, daemon: bool) -> None:
+    """
+    Функция запускает отдельный поток с функцией.
+    """
+    x = threading.Thread(target=func, args=(), daemon=daemon)
+    x.start()
+
+def inspect_request(db_wrapper, mp) -> bool:
+    """
+    Проверяет не нужно ли включить будильник.
+    """
+    #TODO нужно вставить ее куданибуть 
+    while True:
+        for row in db_wrapper.select_all().dicts():
+            if is_date_actual(row["alarm_time"]) == True:
+                start_thread(mp.play, daemon=False)
 
