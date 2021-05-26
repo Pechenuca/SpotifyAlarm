@@ -1,12 +1,13 @@
 from datetime import datetime
+from .Exceptions import *
 
-def is_date_actual(dataBaseDatetime):
+def is_date_actual(dataBaseDatetime: datetime) -> bool:
     """
     Функция для проверки времяни.
     """
     return dataBaseDatetime > datetime.now()
 
-def organizer(query):
+def organizer(query: str) -> list:
     """
     Функция подготавливает данные из таблицы.
     """
@@ -17,3 +18,10 @@ def organizer(query):
             strDict[key] = str(row[key])
         data.append(strDict)
     return data
+
+def check_atr_lenght(data: dict, count: int) -> DictTooManyAtrs:
+    """
+    Функция проверяет колличество поданных аргументов.
+    """
+    if (len(data.keys()) != count):
+        raise DictTooManyAtrs()

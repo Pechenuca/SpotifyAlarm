@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from models import DataBaseWrapper, Requset
-from utils import organizer
+from utils import organizer, check_atr_lenght
 from flask import request, jsonify
 
 class BasicRoots(Resource):
@@ -27,6 +27,11 @@ class BasicRoots(Resource):
         В случае ошибки в запросе возращяет Exception.
         """
         json_data = request.get_json(force=True)
+
+        try:
+            check_atr_lenght(json_data, 3)
+        except Exception as e:
+            return f"{e}"
         
         try:
             alarm = json_data["alarm_time"]
@@ -41,11 +46,16 @@ class BasicRoots(Resource):
     def delete(self) -> str:
         """
         Delete запрос.\n
-        Удаляет запись из таблицы по id.
+        Удаляет запись из таблицы по id.\n
         Пример запроса: {"id": 0}.\n
         В случае ошибки в запросе возращяет Exception.
         """
         json_data = request.get_json(force=True)
+        
+        try:
+            check_atr_lenght(json_data, 1)
+        except Exception as e:
+            return f"{e}"
 
         try:
             row_id = json_data["id"]
@@ -54,6 +64,32 @@ class BasicRoots(Resource):
         
         self.db_wrapper.delete_by_id(int(row_id))
         return f"Data removed from database!"
+    
+    def put(self) -> str:
+        """
+        Put запрос.\n
+        Обновляет запись в таблице по id.\n
+        Пример запроса: {"id": 0, "alarm_time": "2021-05-26 10:11:00.940031", "playlist": "https://google.com", "is_worked": 0}.\n
+        В случае ошибки в запросе возращяет Exception.
+        """
+
+        json_data = request.get_json(force=True)
+
+        try:
+            check_atr_lenght(json_data, 4)
+        except Exception as e:
+            return f"{e}"
+
+        try:
+            row_id = json_data["id"]
+            alarm = json_data["alarm_time"]
+            playlist = json_data["playlist"]
+            is_worked = json_data["is_worked"]
+        except Exception as e:
+            return f"Check your request! Missing {e}"
+
+        self.db_wrapper.update_by_id(row_id, alarm_time=alarm, playlist=playlist, is_worked=is_worked)
+        return f"Data updated!"
         
         
 
