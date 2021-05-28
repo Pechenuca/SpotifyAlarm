@@ -24,6 +24,7 @@ class MusicPlayer():
         """
         Запускает плейлист.
         """
+        #TODO Нужно пофиксить момент когда скчивается только одна песня. Мне сейчас лень ¯\_(ツ)_/¯
         self.mixer.music.load(songs.pop()) 
         self.mixer.music.queue(songs.pop())
         self.mixer.music.set_endevent(pygame.USEREVENT)

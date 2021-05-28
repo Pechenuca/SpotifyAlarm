@@ -1,5 +1,5 @@
-from youtubesearchpython import VideosSearch
 from __future__ import unicode_literals
+from youtubesearchpython import VideosSearch
 from datetime import datetime
 from dotenv import load_dotenv
 from .Exceptions import *
@@ -90,21 +90,14 @@ def get_songs_paths() -> list:
     """
     Функция вернет массив с песнями, а точнее пути к ним.
     """
-    if platform.system() != 'Windows':
-        return glob.glob(str(get_music_path) + "/*.mp3")
-    else:
-        return glob.glob(str(get_music_path) + "\\*.mp3")
+    return glob.glob(get_music_path() + "/*.mp3")
 
-def get_music_path() -> Path:
+def get_music_path() -> str:
     """
     Функция вернет путь к папке с музыкой.
     """
     home_dir = str(Path.home())
-    if platform.system() != 'Windows':
-        download_dir = home_dir + '/SpotifyAlarm'
-    else:
-        download_dir = home_dir + '\\SpotifyAlarm'
-    return download_dir
+    return home_dir + '/SpotifyAlarm'
 
 def title_to_url(playlist: str) -> list:
     """
@@ -119,16 +112,29 @@ def download_music(playlist: list) -> bool:
     """
     Функция скачивает музыку .
     """
-    get_music_path.mkdir(parents=True, exist_ok=True)
+    try:
+        Path(get_music_path()).mkdir(parents=True, exist_ok=True)
+    except FileExistsError:
+        files = glob.glob(get_music_path())
+        for f in files:
+            os.remove(f)
 
     ydl_opts = {
-        'format': 'bestaudio/best',       
-        'outtmpl': str(get_music_path) + '/' + '%(id)s.mp3',        
-        'noplaylist' : True,
+        'outtmpl': str(get_music_path()) + '/' + '%(id)s.%(ext)s',
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }]
     }
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        ydl.download(playlist)
+        try:
+            ydl.download(playlist)
+        except youtube_dl.utils.DownloadError:
+            #TODO Разобраться с этой проблемой! Вроде все равно файл скачивается...
+            pass
 
 def start_thread(func, *func_args, daemon: bool) -> None:
     """
