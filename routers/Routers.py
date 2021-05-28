@@ -23,24 +23,23 @@ class BasicRoots(Resource):
         """
         Post запрос.\n
         Добовляет запрос(будильник).\n
-        Пример запроса: {"alarm_time": "2021-05-26 10:11:00.940031", "playlist": "https://google.com", "is_worked": 0}.\n
+        Пример запроса: {"alarm_time": "2021-05-26 10:11:00.940031", "playlist": "https://google.com"}.\n
         В случае ошибки в запросе возращяет Exception.
         """
         json_data = request.get_json(force=True)
 
         try:
-            check_atr_lenght(json_data, 3)
+            check_atr_lenght(json_data, 2)
         except Exception as e:
             return f"{e}"
         
         try:
             alarm = json_data["alarm_time"]
             playlist = json_data["playlist"]
-            is_worked = json_data["is_worked"]
         except Exception as e:
             return f"Check your request! Missing {e}"
 
-        self.db_wrapper.insert(alarm_time=alarm, playlist=playlist, is_worked=is_worked)
+        self.db_wrapper.insert(alarm_time=alarm, playlist=playlist, is_worked=0, downloaded=0)
         return f"Data added to database!"
     
     def delete(self) -> str:
@@ -69,14 +68,14 @@ class BasicRoots(Resource):
         """
         Put запрос.\n
         Обновляет запись в таблице по id.\n
-        Пример запроса: {"id": 0, "alarm_time": "2021-05-26 10:11:00.940031", "playlist": "https://google.com", "is_worked": 0}.\n
+        Пример запроса: {"id": 0, "alarm_time": "2021-05-26 10:11:00.940031", "playlist": "https://google.com", "is_worked": 0, "downloaded": 0}.\n
         В случае ошибки в запросе возращяет Exception.
         """
 
         json_data = request.get_json(force=True)
 
         try:
-            check_atr_lenght(json_data, 4)
+            check_atr_lenght(json_data, 5)
         except Exception as e:
             return f"{e}"
 
@@ -85,10 +84,11 @@ class BasicRoots(Resource):
             alarm = json_data["alarm_time"]
             playlist = json_data["playlist"]
             is_worked = json_data["is_worked"]
+            downloaded = json_data["downloaded"]
         except Exception as e:
             return f"Check your request! Missing {e}"
 
-        self.db_wrapper.update_by_id(row_id, alarm_time=alarm, playlist=playlist, is_worked=is_worked)
+        self.db_wrapper.update_by_id(row_id, alarm_time=alarm, playlist=playlist, is_worked=is_worked, downloaded=downloaded)
         return f"Data updated!"
         
         
