@@ -7,6 +7,10 @@
 ```
 pip install -r requirements.txt
 ```
+### ffmpeg
+Без этой фигни нифига работать не будет 
+https://www.ffmpeg.org/download.html#build-windows
+p.s. нужно добавить в PATH 
 
 ## Запуск
 Вставьте Client ID и Client Secret в .env.
