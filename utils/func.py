@@ -144,8 +144,8 @@ def inspect_request(db_wrapper, mp) -> bool:
     while True:
         for row in db_wrapper.select_all().dicts():
             if is_date_actual(row["alarm_time"]) == True:
-                download_music(title_to_url(row["playlist"]))
                 if row["downloaded"] != True:
+                    download_music(title_to_url(row["playlist"]))
                     db_wrapper.update_by_id(
                         row["id"],
                         downloaded=1
