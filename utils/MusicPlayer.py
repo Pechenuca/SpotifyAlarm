@@ -6,12 +6,11 @@ class MusicPlayer():
     Класс для работы с pygame.\n
     В частности mixer.
     """
-    def __init__(self, songs: list) -> None:
+    def __init__(self) -> None:
         """
         Передается массив с песнями, а точнее путь к ним.
         """
         pygame.init()
-        self.songs = songs
         self.mixer = mixer
         self.mixer.init()
     
@@ -21,12 +20,12 @@ class MusicPlayer():
         """
         self.mixer.music.stop()
     
-    def play(self) -> None:
+    def play(self, songs: list) -> None:
         """
         Запускает плейлист.
         """
-        self.mixer.music.load(self.songs.pop()) 
-        self.mixer.music.queue(self.songs.pop())
+        self.mixer.music.load(songs.pop()) 
+        self.mixer.music.queue(songs.pop())
         self.mixer.music.set_endevent(pygame.USEREVENT)
         self.mixer.music.play() 
 
@@ -34,5 +33,7 @@ class MusicPlayer():
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.USEREVENT:    
-                    if len (self.songs) > 0:
-                        self.mixer.music.queue(self.songs.pop())
+                    if len(songs) > 0:
+                        self.mixer.music.queue(songs.pop())
+                    if len(songs) == 0:
+                        self.stop()

@@ -3,3 +3,5 @@ flask-restful
 spotipy
 python-dotenv
 pygame
+youtube-dl
+youtube-search-python
