@@ -136,7 +136,7 @@ def download_music(playlist: list) -> bool:
             #TODO Разобраться с этой проблемой! Вроде все равно файл скачивается...
             pass
 
-def start_thread(func, *func_args, daemon: bool) -> None:
+def start_thread(func, daemon: bool, *func_args) -> None:
     """
     Функция запускает отдельный поток с функцией.
     """
@@ -156,5 +156,9 @@ def inspect_request(db_wrapper, mp) -> bool:
                         row["id"],
                         downloaded=1
                     )
-                if row["downloaded"] == 1:
-                    start_thread(mp.play, get_songs_paths(), daemon=False)
+                if row["downloaded"] == 1 and row["is_worked"] == 0:
+                    db_wrapper.update_by_id(
+                        row["id"],
+                        is_worked=1
+                    )
+                    start_thread(mp.play, False, get_songs_paths())

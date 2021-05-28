@@ -13,15 +13,10 @@ api = Api(app)
 if is_first_launch() == False:
     
     mp = MusicPlayer()
-    # db_wrapper = DataBaseWrapper(Requset)
-    # inspect_request(db_wrapper, mp)
-
-    # download_music(['https://www.youtube.com/watch?v=C81zAPm0wv4']) 
-    # print(get_songs_paths())
+    db_wrapper = DataBaseWrapper(Requset)
     api.add_resource(BasicRoots, '/')
     api.add_resource(MusicController, '/alarm')
-    
-    start_thread(mp.play, get_songs_paths(), daemon=False)
+    start_thread(inspect_request, False, db_wrapper, mp,)
     app.run(debug=True)
 else:
     print("Add spotify tokens to .env!")
