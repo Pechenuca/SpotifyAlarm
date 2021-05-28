@@ -1,14 +1,46 @@
 from flask_restful import Resource
 from models import DataBaseWrapper, Requset
-from utils import organizer, check_atr_lenght
+from utils import organizer, check_atr_lenght, MusicPlayer
 from flask import request, jsonify
 
-class BasicRoots(Resource):
-
+class BaseResource(Resource):
+    """
+    Родительский роутер.
+    """
     def __init__(self) -> None:
         super().__init__()
         self.db_wrapper = DataBaseWrapper(Requset)
 
+class MusicController(BaseResource):
+    """
+    Данный ресурс служит для работы с MusicPlayer
+    """
+    def __init__(self) -> None:
+        super().__init__()
+    
+    def post(self) -> str:
+        """
+        Post запрос.\n
+        Выключает музыку.\n
+        Пример данных: {"alarm": "stop"}
+        """
+        json_data = request.get_json(force=True)
+
+        try:
+            check_atr_lenght(json_data, 1)
+        except Exception as e:
+            return f"{e}"
+        
+        mp = MusicPlayer()
+        mp.stop()
+
+        return f"Alarm stoped!"
+
+class BasicRoots(BaseResource):
+
+    def __init__(self) -> None:
+        super().__init__()
+        
     """
     Базовый роутер (ресурс)
     """
@@ -91,7 +123,3 @@ class BasicRoots(Resource):
         self.db_wrapper.update_by_id(row_id, alarm_time=alarm, playlist=playlist, is_worked=is_worked, downloaded=downloaded)
         return f"Data updated!"
         
-        
-
-
-    
