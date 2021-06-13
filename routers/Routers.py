@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from models import DataBaseWrapper, Requset
-from utils import organizer, check_atr_lenght, MusicPlayer
+from utils import organizer, check_atr_lenght, MusicPlayer, SpotifyWorker, get_spotify_tokens
 from flask import request, jsonify
 
 class BaseResource(Resource):
@@ -10,6 +10,15 @@ class BaseResource(Resource):
     def __init__(self) -> None:
         super().__init__()
         self.db_wrapper = DataBaseWrapper(Requset)
+
+class SpotifyController(BaseResource):
+    """
+
+    """
+    def __init__(self) -> None:
+        super().__init__()
+        self.sp = SpotifyWorker(get_spotify_tokens())
+
 
 class MusicController(BaseResource):
     """
