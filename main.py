@@ -10,13 +10,13 @@ db_worker.create_tables([Requset])
 app = Flask(__name__)
 api = Api(app)
 
-if is_first_launch() == False:
-    
+if not is_first_launch():
+    worker = SpotifyWorker(get_spotify_tokens())
     mp = MusicPlayer()
     db_wrapper = DataBaseWrapper(Requset)
     api.add_resource(BasicRoots, '/')
     api.add_resource(MusicController, '/alarm')
-    start_thread(inspect_request, False, db_wrapper, mp,)
+    start_thread(inspect_request, False, db_wrapper, mp, worker)
     app.run(debug=True)
 else:
     print("Add spotify tokens to .env!")

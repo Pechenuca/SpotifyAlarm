@@ -2,12 +2,15 @@ from peewee import *
 
 database = SqliteDatabase('database.sqlite')
 
+
 class BaseModel(Model):
     """
     Базовая модель.
     """
+
     class Meta:
         database = database
+
 
 class Requset(BaseModel):
     """

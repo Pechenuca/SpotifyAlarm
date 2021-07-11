@@ -1,9 +1,11 @@
 from . import database
 
+
 class DataBaseAssistant():
     """
     Класс для работы с 'физическим' вооплощением базы данных
     """
+
     def __init__(self) -> None:
         self.database = database
 
@@ -13,5 +15,5 @@ class DataBaseAssistant():
         """
         with self.database:
             self.database.create_tables(tables)
-    
-    #TODO Нужно добавить функцию для удаления файла sqlite3
+
+    # TODO Нужно добавить функцию для удаления файла sqlite3

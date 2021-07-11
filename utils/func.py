@@ -6,15 +6,16 @@ from .Exceptions import *
 from pathlib import Path
 import threading
 import youtube_dl
-import platform
 import glob
 import os
+
 
 def is_date_actual(dataBaseDatetime: datetime) -> bool:
     """
     Функция для проверки времяни.
     """
     return dataBaseDatetime == datetime.now()
+
 
 def organizer(query: str) -> list:
     """
@@ -28,12 +29,14 @@ def organizer(query: str) -> list:
         data.append(strDict)
     return data
 
-def check_atr_lenght(data: dict, count: int) -> DictTooManyAtrs:
+
+def check_atr_length(data: dict, count: int) -> DictTooManyAttrs:
     """
     Функция проверяет колличество поданных аргументов.
     """
-    if (len(data.keys()) != count):
-        raise DictTooManyAtrs()
+    if len(data.keys()) != count:
+        raise DictTooManyAttrs()
+
 
 def is_first_launch() -> bool:
     """
@@ -52,15 +55,15 @@ def is_first_launch() -> bool:
         f.close()
         return False
 
+
 def get_spotify_tokens() -> dict:
     """
     Функция берет токены из .env файла.
     """
     load_dotenv()
-    spotify_tokens = {}
-    spotify_tokens['id'] = os.getenv('CLIENT_ID')
-    spotify_tokens['secret'] = os.getenv('CLIENT_SECRET')
+    spotify_tokens = {'id': os.getenv('CLIENT_ID'), 'secret': os.getenv('CLIENT_SECRET')}
     return spotify_tokens
+
 
 def get_songs(sp: dict) -> list:
     """
@@ -72,10 +75,11 @@ def get_songs(sp: dict) -> list:
         tr_name = track['track']['name']
         tr_artist_name = track['track']['artists'][0]['name']
         tracks_list.append(f'{tr_name} {tr_artist_name}')
-    
+
     return tracks_list
 
-def get_playlist_data(sp: dict) -> list:
+
+def get_playlist_data(sp: dict) -> dict:
     """
     Возвращает обложку описание и тд.
     """
@@ -86,11 +90,13 @@ def get_playlist_data(sp: dict) -> list:
         "cover": sp["images"][0]["url"]
     }
 
+
 def get_songs_paths() -> list:
     """
     Функция вернет массив с песнями, а точнее пути к ним.
     """
     return glob.glob(get_music_path() + "/*.mp3")
+
 
 def get_music_path() -> str:
     """
@@ -99,18 +105,20 @@ def get_music_path() -> str:
     home_dir = str(Path.home())
     return home_dir + '/SpotifyAlarm'
 
-def title_to_url(playlist: str) -> list:
+
+def title_to_url(playlist: str, sp) -> list:
     """
     Функция переводит название песен в url для youtube.
     """
     y_playlist = []
-    for song in playlist.split(','):
-        y_playlist.append(VideosSearch(song, limit = 1))
+    for song in get_songs(sp.find_playlist_by_id(playlist)):
+        y_playlist.append(VideosSearch(song, limit=1))
     return y_playlist
+
 
 def download_music(playlist: list) -> bool:
     """
-    Функция скачивает музыку .
+    Функция скачивает музыку.
     """
     try:
         Path(get_music_path()).mkdir(parents=True, exist_ok=True)
@@ -124,8 +132,8 @@ def download_music(playlist: list) -> bool:
         'format': 'bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
+            'preference': 'mp3',
+            'preferential': '192',
         }]
     }
 
@@ -133,25 +141,26 @@ def download_music(playlist: list) -> bool:
         try:
             ydl.download(playlist)
         except youtube_dl.utils.DownloadError:
-            #TODO Разобраться с этой проблемой! Вроде все равно файл скачивается...
             pass
+
 
 def start_thread(func, daemon: bool, *func_args) -> None:
     """
     Функция запускает отдельный поток с функцией.
     """
-    x = threading.Thread(target=func, args=(func_args), daemon=daemon)
+    x = threading.Thread(target=func, args=func_args, daemon=daemon)
     x.start()
 
-def inspect_request(db_wrapper, mp) -> bool:
+
+def inspect_request(db_wrapper, mp, sp) -> bool:
     """
     Проверяет не нужно ли включить будильник.
     """
     while True:
         for row in db_wrapper.select_all().dicts():
-            if is_date_actual(row["alarm_time"]) == True:
-                if row["downloaded"] != True:
-                    download_music(title_to_url(row["playlist"]))
+            if is_date_actual(row["alarm_time"]):
+                if not row["downloaded"]:
+                    download_music(title_to_url(row["playlist"], sp))
                     db_wrapper.update_by_id(
                         row["id"],
                         downloaded=1
