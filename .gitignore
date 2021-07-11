@@ -2,3 +2,4 @@ __pycache__
 database.sqlite
 .env
 .cache
+.vscode
